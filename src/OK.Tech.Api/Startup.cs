@@ -31,6 +31,7 @@ namespace OK.Tech.Api
 
             services.AddAutoMapper(typeof(Startup));
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProductApp, ProductApp>();
             services.AddScoped<IProductRepository, ProductRepository>();
             

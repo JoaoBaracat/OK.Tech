@@ -43,8 +43,8 @@ namespace OK.Tech.Api.Controllers
             return CustomResponse(product);
         }
 
-        [HttpPost("{id:Guid}")]
-        public ActionResult<ProductViewModel> CreateProduct (Guid id, ProductViewModel productViewModel)
+        [HttpPost]
+        public async Task<ActionResult<ProductViewModel>> CreateProduct (ProductViewModel productViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -60,11 +60,13 @@ namespace OK.Tech.Api.Controllers
             }
 
             var product = _mapper.Map<Product>(productViewModel);
-            _productApp.Create(product);
+            await _productApp.Create(product);
 
             return CustomResponse(productViewModel);
         }
 
+
+        //arrumar abaixo
         [HttpPut("{id:Guid}")]
         public ActionResult<ProductViewModel> UpdateProduct(Guid id, ProductViewModel productViewModel)
         {

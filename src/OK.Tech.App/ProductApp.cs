@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace OK.Tech.App
 {
-    public class ProductApp : IProductApp
+    public class ProductApp : AppBase, IProductApp
     {
         private readonly IProductRepository _productRepository;
 
-        public ProductApp(IProductRepository productRepository)
+        public ProductApp(IProductRepository productRepository, IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             _productRepository = productRepository;
         }
@@ -26,19 +26,25 @@ namespace OK.Tech.App
             return await _productRepository.GetById(id);
         }
 
-        public void Create(Product product)
+        public async Task Create(Product product)
         {
             _productRepository.Create(product);
+            
+            await UnitOfWork.Save();
         }
 
         public void Update(Product product)
         {
             _productRepository.Update(product);
+            
+            //UnitOfWork.Save();
         }
 
         public void Delete(Guid id)
         {
             _productRepository.Delete(id);
+            
+            //UnitOfWork.Save();
         }
 
     }

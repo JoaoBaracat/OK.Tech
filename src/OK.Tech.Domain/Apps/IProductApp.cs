@@ -9,7 +9,7 @@ namespace OK.Tech.Domain.Apps
     {
         Task<IEnumerable<Product>> GetAll();
         Task<Product> GetById(Guid id);
-        void Create(Product product);
+        Task Create(Product product);
         void Update(Product product);
         void Delete(Guid id);
     }
