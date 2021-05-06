@@ -1,5 +1,7 @@
 ﻿using OK.Tech.Domain.Apps;
 using OK.Tech.Domain.Entities;
+using OK.Tech.Domain.Entities.Validations;
+using OK.Tech.Domain.Notifications;
 using OK.Tech.Domain.Repositories;
 using System;
 using System.Collections.Generic;
@@ -9,9 +11,9 @@ namespace OK.Tech.App
 {
     public class ProductApp : AppBase, IProductApp
     {
-        private readonly IProductRepository _productRepository;
+        private readonly IProductRepository _productRepository;        
 
-        public ProductApp(IProductRepository productRepository, IUnitOfWork unitOfWork) : base(unitOfWork)
+        public ProductApp(IProductRepository productRepository, IUnitOfWork unitOfWork, INotifier notifier) : base(unitOfWork, notifier)
         {
             _productRepository = productRepository;
         }
@@ -28,6 +30,11 @@ namespace OK.Tech.App
 
         public async Task Create(Product product)
         {
+            if (!Validate(new ProductValidation(), product))
+            {
+                return;
+            }
+
             _productRepository.Create(product);
             
             await UnitOfWork.Save();

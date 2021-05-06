@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OK.Tech.App;
 using OK.Tech.Domain.Apps;
+using OK.Tech.Domain.Notifications;
 using OK.Tech.Domain.Repositories;
 using OK.Tech.Infra.Data.Contexts;
 using OK.Tech.Infra.Data.Repositories;
@@ -32,6 +33,7 @@ namespace OK.Tech.Api
             services.AddAutoMapper(typeof(Startup));
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<INotifier, Notifier>();
             services.AddScoped<IProductApp, ProductApp>();
             services.AddScoped<IProductRepository, ProductRepository>();
             
