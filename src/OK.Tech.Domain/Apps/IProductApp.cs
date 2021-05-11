@@ -10,7 +10,7 @@ namespace OK.Tech.Domain.Apps
         Task<IEnumerable<Product>> GetAll();
         Task<Product> GetById(Guid id);
         Task Create(Product product);
-        void Update(Product product);
-        void Delete(Guid id);
+        Task Update(Guid id, Product product);
+        Task Delete(Guid id);
     }
 }

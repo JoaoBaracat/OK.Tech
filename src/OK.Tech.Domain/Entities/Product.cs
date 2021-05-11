@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace OK.Tech.Domain.Entities
+﻿namespace OK.Tech.Domain.Entities
 {
     public class Product : Entity
     {

@@ -32,11 +32,6 @@ namespace OK.Tech.App
 
         protected void Notify(ValidationResult validationReult)
         {
-            //foreach (var item in validationReult.Errors)
-            //{
-            //    Notify(item.ErrorMessage);
-            //}
-
             validationReult.Errors.ToList().ForEach((e) => { Notify(e.ErrorMessage); });
         }
 

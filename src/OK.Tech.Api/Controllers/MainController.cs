@@ -44,7 +44,7 @@ namespace OK.Tech.Api.Controllers
                 return true;
             }
 
-            //TODO: Tratar erros
+            NotifyModelStateErrors();
 
             return false;
         }
@@ -52,7 +52,19 @@ namespace OK.Tech.Api.Controllers
         protected void NotifyModelStateErrors()
         {
             IEnumerable<ModelError> errors = ModelState.Values.SelectMany(e => e.Errors);
-            
+
+            foreach (var error in errors)
+            {
+                string errorMessage = error.Exception == null ? error.ErrorMessage : error.Exception.Message;
+
+                NotifyError(errorMessage);
+            }
+        }
+
+        protected void NotifyError(string errorMessage)
+        {
+            _notifier.Handle(new Notification(errorMessage));
+
         }
 
 

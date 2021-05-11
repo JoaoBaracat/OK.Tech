@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using OK.Tech.Api.Models;
 using OK.Tech.Domain.Apps;
 using OK.Tech.Domain.Entities;
+using OK.Tech.Domain.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace OK.Tech.Api.Controllers
         private readonly IProductApp _productApp;
         private readonly IMapper _mapper;
 
-        public ProductsController(IProductApp productApp, IMapper mapper)
+        public ProductsController(IProductApp productApp, IMapper mapper, INotifier notifier) : base(notifier)
         {
             _productApp = productApp;
             _mapper = mapper;
@@ -33,61 +34,46 @@ namespace OK.Tech.Api.Controllers
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult<ProductViewModel>> GetProductById(Guid id)
         {
-            //var prod = new ProductViewModel()
-            //{
-            //    Id = new Guid(),
-            //    Name = "Teclado"
-            //};
             var product = _mapper.Map<IEnumerable<ProductViewModel>>(await _productApp.GetById(id));
 
             return CustomResponse(product);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductViewModel>> CreateProduct (ProductViewModel productViewModel)
+        public async Task<ActionResult> CreateProduct (ProductViewModel productViewModel)
         {
-            if (!ModelState.IsValid)
+            if (!IsModelValid())
             {
-                //var erros = ModelState.Values.SelectMany(err => err.Errors).FirstOrDefault().ErrorMessage;
-                //return BadRequest(new
-                //{
-                //    success = false,
-                //    error = erros,
-                //    data = productViewModel
-                //});
-
-                return CustomResponse(ModelState, productViewModel);
+                return CustomResponse(productViewModel);
             }
 
             var product = _mapper.Map<Product>(productViewModel);
             await _productApp.Create(product);
 
-            return CustomResponse(productViewModel);
+            return CustomResponse();
         }
 
 
         //arrumar abaixo
         [HttpPut("{id:Guid}")]
-        public ActionResult<ProductViewModel> UpdateProduct(Guid id, ProductViewModel productViewModel)
+        public async Task<ActionResult> UpdateProduct(Guid id, ProductViewModel productViewModel)
         {
-            var product = _mapper.Map<Product>(productViewModel);
-            _productApp.Update(product);
+            if (!IsModelValid())
+            {
+                return CustomResponse(productViewModel);
+            }
 
-            return CustomResponse(ModelState, productViewModel);
+            await _productApp.Update(id, _mapper.Map<Product>(productViewModel));
+
+            return CustomResponse();
         }
 
         [HttpDelete("{id:Guid}")]
-        public ActionResult<ProductViewModel> DeleteProduct(Guid id)
+        public async Task<ActionResult> DeleteProduct(Guid id)
         {
-            //var prod = new ProductViewModel()
-            //{
-            //    Id = new Guid(),
-            //    Name = "Teclado"
-            //};
-            var productViewModel = _mapper.Map<IEnumerable<ProductViewModel>>(_productApp.GetById(id));
-            _productApp.Delete(id);
+            await _productApp.Delete(id);
 
-            return CustomResponse(productViewModel);
+            return CustomResponse();
         }
 
     }
