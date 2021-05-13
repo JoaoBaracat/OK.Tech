@@ -34,7 +34,7 @@ namespace OK.Tech.Api.Controllers
         [HttpGet("{id:Guid}")]
         public async Task<ActionResult<ProductViewModel>> GetProductById(Guid id)
         {
-            var product = _mapper.Map<IEnumerable<ProductViewModel>>(await _productApp.GetById(id));
+            var product = _mapper.Map<ProductViewModel>(await _productApp.GetById(id));
 
             return CustomResponse(product);
         }
@@ -53,8 +53,6 @@ namespace OK.Tech.Api.Controllers
             return CustomResponse();
         }
 
-
-        //arrumar abaixo
         [HttpPut("{id:Guid}")]
         public async Task<ActionResult> UpdateProduct(Guid id, ProductViewModel productViewModel)
         {

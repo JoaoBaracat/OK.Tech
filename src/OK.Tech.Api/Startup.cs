@@ -34,7 +34,11 @@ namespace OK.Tech.Api
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<INotifier, Notifier>();
+
             services.AddScoped<IProductApp, ProductApp>();
+            services.AddScoped<IPriceListApp, PriceListApp>();
+            
+            services.AddScoped<IPriceListRepository, PriceListRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             
             services.AddControllers();
